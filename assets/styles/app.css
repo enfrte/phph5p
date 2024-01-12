@@ -1,1 +1,5 @@
-    
+.phph5p-error-list ul {
+    list-style: none; 
+    padding: 0;
+    margin: 0; 
+}

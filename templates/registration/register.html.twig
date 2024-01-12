@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+
+<div class="container mt-5">
+	<div class="row justify-content-center">
+		<div class="col-md-6">
+			<div class="card">
+				<div class="card-header">
+					<h3 class="text-center">Register</h3>
+				</div>
+				<div class="card-body">
+
+					{% if form_errors(registrationForm) %}
+						<div class="alert alert-danger phph5p-error-list" role="alert">
+							{# Issue: class property not applied to <ul> #}
+							{{ form_errors(registrationForm) }}
+						</div>
+					{% endif %}
+
+					{{ form_start(registrationForm, {'attr': {'class': 'row g-3'}}) }}
+						<div class="mb-3">
+							{{ form_row(registrationForm.email, {
+								'attr': {
+									'class': 'form-control',
+									'placeholder': 'Enter your email',
+								}
+							}) }}
+						</div>
+
+						<div class="mb-3">
+							{{ form_row(registrationForm.plainPassword, {
+								'label': 'Password',
+								'attr': {
+									'class': 'form-control',
+									'placeholder': 'Enter your password',
+								}
+							}) }}
+						</div>
+
+						<div class="col-12">
+							<button type="submit" class="btn btn-primary">Register</button>
+						</div>
+					{{ form_end(registrationForm) }}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
