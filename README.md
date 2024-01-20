@@ -15,17 +15,16 @@ CREATE TABLE course (
     course_id INT AUTO_INCREMENT PRIMARY KEY,
     course_name VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    user_id INT,
+    user_id INT, --owner creator of the course
     FOREIGN KEY (user_id) REFERENCES user(user_id),
 );
 
 -- Module Table
 CREATE TABLE module (
     module_id INT AUTO_INCREMENT PRIMARY KEY,
-    --think about adding the h5p module identifier
     module_name VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    user_id INT,
+    user_id INT, --uploader of the module
     FOREIGN KEY (user_id) REFERENCES user(user_id),
 );
 

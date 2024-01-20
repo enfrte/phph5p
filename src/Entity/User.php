@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -29,6 +31,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\OneToMany(mappedBy: 'userId', targetEntity: Course::class, orphanRemoval: true)]
+    private Collection $courses;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Module::class)]
+    private Collection $modules;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserResponses::class, orphanRemoval: true)]
+    private Collection $userResponses;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserCourse::class, orphanRemoval: true)]
+    private Collection $userCourses;
+
+    public function __construct()
+    {
+        $this->courses = new ArrayCollection();
+        $this->modules = new ArrayCollection();
+        $this->userResponses = new ArrayCollection();
+        $this->userCourses = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -98,5 +120,125 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Course>
+     */
+    public function getCourses(): Collection
+    {
+        return $this->courses;
+    }
+
+    public function addCourse(Course $course): static
+    {
+        if (!$this->courses->contains($course)) {
+            $this->courses->add($course);
+            $course->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCourse(Course $course): static
+    {
+        if ($this->courses->removeElement($course)) {
+            // set the owning side to null (unless already changed)
+            if ($course->getUserId() === $this) {
+                $course->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Module>
+     */
+    public function getModules(): Collection
+    {
+        return $this->modules;
+    }
+
+    public function addModule(Module $module): static
+    {
+        if (!$this->modules->contains($module)) {
+            $this->modules->add($module);
+            $module->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeModule(Module $module): static
+    {
+        if ($this->modules->removeElement($module)) {
+            // set the owning side to null (unless already changed)
+            if ($module->getUser() === $this) {
+                $module->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserResponses>
+     */
+    public function getUserResponses(): Collection
+    {
+        return $this->userResponses;
+    }
+
+    public function addUserResponse(UserResponses $userResponse): static
+    {
+        if (!$this->userResponses->contains($userResponse)) {
+            $this->userResponses->add($userResponse);
+            $userResponse->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserResponse(UserResponses $userResponse): static
+    {
+        if ($this->userResponses->removeElement($userResponse)) {
+            // set the owning side to null (unless already changed)
+            if ($userResponse->getUser() === $this) {
+                $userResponse->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserCourse>
+     */
+    public function getUserCourses(): Collection
+    {
+        return $this->userCourses;
+    }
+
+    public function addUserCourse(UserCourse $userCourse): static
+    {
+        if (!$this->userCourses->contains($userCourse)) {
+            $this->userCourses->add($userCourse);
+            $userCourse->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserCourse(UserCourse $userCourse): static
+    {
+        if ($this->userCourses->removeElement($userCourse)) {
+            // set the owning side to null (unless already changed)
+            if ($userCourse->getUser() === $this) {
+                $userCourse->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
