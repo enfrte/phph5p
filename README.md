@@ -1,5 +1,10 @@
 # phph5p
 
+Creating courses and modules makes use of EasyAdminBundle. 
+
+EasyAdminBundle tutorial https://symfonycasts.com/screencast/easyadminbundle/menu-items#play
+
+
 -- User Table with Email, Password, and Role
 CREATE TABLE user (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
